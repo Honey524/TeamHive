@@ -115,7 +115,7 @@ GOOGLE_CLIENT_ID=<your-google-client-id>
 GOOGLE_CLIENT_SECRET=<your-google-client-secret>  
 GOOGLE_CALLBACK_URL=http://localhost:8000/api/auth/google/callback
 
-FRONTEND_ORIGIN=http://localhost:3000
+FRONTEND_ORIGIN=http://localhost:5173
 FRONTEND_GOOGLE_CALLBACK_URL=http://localhost:3000/google/callback
 ````
 
@@ -131,7 +131,7 @@ npm install
 npm run dev
 ```
 
-This will launch the backend server on `http://localhost:8000` and the frontend on `http://localhost:3000`.
+This will launch the backend server on `http://localhost:8000` and the frontend on `http://localhost:5173`.
 
 ---
 

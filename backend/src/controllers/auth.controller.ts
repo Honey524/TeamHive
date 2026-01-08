@@ -5,6 +5,7 @@ import { registerSchema } from "../validation/auth.validation";
 import { HTTPSTATUS } from "../config/http.config";
 import { registerUserService } from "../services/auth.service";
 import passport from "passport";
+import UserModel from "../models/user.model";
 
 // Removed: googleLoginCallback (Google-specific)
 
@@ -14,10 +15,24 @@ export const registerUserController = asyncHandler(
       ...req.body,
     });
 
-    await registerUserService(body);
+    const result = await registerUserService(body);
+
+    // Log the user in after successful registration
+    const user = await UserModel.findById(result.userId);
+    if (user) {
+      req.logIn(user, (err) => {
+        if (err) {
+          console.error("Error logging in user after registration:", err);
+        }
+      });
+    }
 
     return res.status(HTTPSTATUS.CREATED).json({
       message: "User created successfully",
+      user: {
+        _id: result.userId,
+        currentWorkspace: result.workspaceId,
+      },
     });
   }
 );

@@ -25,8 +25,9 @@ API.interceptors.response.use(
     const response = error.response;
     const status = response?.status;
     const data = response?.data;
+    const url = response?.config?.url;
 
-    if (status === 401) {
+    if (status === 401 && !url?.includes('/user/current')) {
       window.location.href = "/";
     }
 

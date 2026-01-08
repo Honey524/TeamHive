@@ -32,8 +32,8 @@ function AppRoutes() {
           </Route>
         </Route>
 
-        {/* Protected Route */}
-        <Route path="/" element={<ProtectedRoute />}>
+        {/* Protected Routes */}
+        <Route element={<ProtectedRoute />}>
           <Route element={<AppLayout />}>
             {protectedRoutePaths.map((route) => (
               <Route

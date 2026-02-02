@@ -14,15 +14,15 @@ const ProjectHeader = () => {
 
   const workspaceId = useWorkspaceId();
 
-  const { data, isPending, isError } = useQuery({
-    queryKey: ["singleProject", projectId],
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["singleProject", workspaceId, projectId],
     queryFn: () =>
       getProjectByIdQueryFn({
         workspaceId,
         projectId,
       }),
     staleTime: Infinity,
-    enabled: !!projectId,
+    enabled: !!projectId && !!workspaceId,
     placeholderData: keepPreviousData,
   });
 
@@ -33,7 +33,7 @@ const ProjectHeader = () => {
   const projectName = project?.name || "Untitled project";
 
   const renderContent = () => {
-    if (isPending) return <span>Loading...</span>;
+    if (isLoading) return <span>Loading...</span>;
     if (isError) return <span>Error occured</span>;
     return (
       <>

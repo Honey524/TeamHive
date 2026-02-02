@@ -32,8 +32,13 @@ app.use(
     name: "session",
     keys: [config.SESSION_SECRET],
     maxAge: 24 * 60 * 60 * 1000,
+    // In production we require secure cookies; during local development
+    // allow cross-site usage so the frontend (different port) can send
+    // credentials. Note: browsers may enforce Secure for SameSite=None.
     secure: config.NODE_ENV === "production",
     httpOnly: true,
+    // Use 'lax' by default which works for local development and most flows.
+    // Avoid SameSite=None without Secure because browsers require Secure for None.
     sameSite: "lax",
   })
 );

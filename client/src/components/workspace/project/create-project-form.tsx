@@ -21,10 +21,17 @@ import {
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useWorkspaceId from "@/hooks/use-workspace-id";
+import { useAuthContext } from "@/context/auth-provider";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createProjectMutationFn } from "@/lib/api";
 import { toast } from "@/hooks/use-toast";
 import { Loader } from "lucide-react";
+
+interface CreateProjectResponse {
+  project: {
+    _id: string;
+  };
+}
 
 export default function CreateProjectForm({
   onClose,
@@ -33,13 +40,18 @@ export default function CreateProjectForm({
 }) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const workspaceId = useWorkspaceId();
+  const workspaceIdFromParams = useWorkspaceId();
+  const { workspace } = useAuthContext();
+  const workspaceId = workspaceIdFromParams || workspace?._id;
+  const isValidWorkspaceId = !!workspaceId && workspaceId !== "undefined";
 
   const [emoji, setEmoji] = useState("📊");
 
-  const { mutate, isPending } = useMutation({
+  const createProjectMutation = useMutation({
     mutationFn: createProjectMutationFn,
   });
+  const { mutate } = createProjectMutation;
+  const isLoading = createProjectMutation.status === "pending";
 
   const formSchema = z.object({
     name: z.string().trim().min(1, {
@@ -61,7 +73,15 @@ export default function CreateProjectForm({
   };
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    if (isPending) return;
+    if (isLoading) return;
+    if (!isValidWorkspaceId) {
+      toast({
+        title: "Error",
+        description: "Workspace is not selected",
+        variant: "destructive",
+      });
+      return;
+    }
     const payload = {
       workspaceId,
       data: {
@@ -71,7 +91,7 @@ export default function CreateProjectForm({
     };
     mutate(payload, {
       onSuccess: (data) => {
-        const project = data.project;
+        const project = (data as CreateProjectResponse)?.project;
         queryClient.invalidateQueries({
           queryKey: ["allprojects", workspaceId],
         });
@@ -85,10 +105,12 @@ export default function CreateProjectForm({
         navigate(`/workspace/${workspaceId}/project/${project._id}`);
         setTimeout(() => onClose(), 500);
       },
-      onError: (error) => {
+      onError: (error: unknown) => {
+        const message =
+          (error as Error)?.message || "Something went wrong while creating project";
         toast({
           title: "Error",
-          description: error.message,
+          description: message,
           variant: "destructive",
         });
       },
@@ -176,11 +198,11 @@ export default function CreateProjectForm({
             </div>
 
             <Button
-              disabled={isPending}
+              disabled={isLoading}
               className="flex place-self-end  h-[40px] text-white font-semibold"
               type="submit"
             >
-              {isPending && <Loader className="animate-spin" />}
+              {isLoading && <Loader className="animate-spin" />}
               Create
             </Button>
           </form>

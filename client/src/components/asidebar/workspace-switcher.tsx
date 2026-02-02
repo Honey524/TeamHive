@@ -37,7 +37,7 @@ export function WorkspaceSwitcher() {
 
   const [activeWorkspace, setActiveWorkspace] = React.useState<WorkspaceType>();
 
-  const { data, isPending } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["userWorkspaces"],
     queryFn: getAllWorkspacesUserIsMemberQueryFn,
     staleTime: 1,
@@ -114,7 +114,7 @@ export function WorkspaceSwitcher() {
               <DropdownMenuLabel className="text-xs text-muted-foreground">
                 Workspaces
               </DropdownMenuLabel>
-              {isPending ? <Loader className=" w-5 h-5 animate-spin" /> : null}
+              {isLoading ? <Loader className=" w-5 h-5 animate-spin" /> : null}
 
               {workspaces?.map((workspace) => (
                 <DropdownMenuItem

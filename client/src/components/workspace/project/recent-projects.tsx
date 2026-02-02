@@ -9,7 +9,7 @@ import { format } from "date-fns";
 const RecentProjects = () => {
   const workspaceId = useWorkspaceId();
 
-  const { data, isPending } = useGetProjectsInWorkspaceQuery({
+  const { data, isLoading } = useGetProjectsInWorkspaceQuery({
     workspaceId,
     pageNumber: 1,
     pageSize: 10,
@@ -19,7 +19,7 @@ const RecentProjects = () => {
 
   return (
     <div className="flex flex-col pt-2">
-      {isPending ? (
+      {isLoading ? (
         <Loader
           className="w-8 h-8
          animate-spin

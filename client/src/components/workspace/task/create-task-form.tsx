@@ -51,18 +51,21 @@ export default function CreateTaskForm(props: {
   const queryClient = useQueryClient();
   const workspaceId = useWorkspaceId();
 
-  const { mutate, isPending } = useMutation({
+  const createTaskMutation = useMutation({
     mutationFn: createTaskMutationFn,
   });
+  const { mutate } = createTaskMutation;
+  const isCreating = createTaskMutation.status === "pending";
 
-  const { data, isLoading } = useGetProjectsInWorkspaceQuery({
-    workspaceId,
-    skip: !!projectId,
-  });
+  const { data: projectsData, isLoading: isProjectsLoading } =
+    useGetProjectsInWorkspaceQuery({
+      workspaceId,
+      skip: !!projectId,
+    });
 
   const { data: memberData } = useGetWorkspaceMembers(workspaceId);
 
-  const projects = data?.projects || [];
+  const projects = projectsData?.projects || [];
   const members = memberData?.members || [];
 
   //Workspace Projects
@@ -142,7 +145,7 @@ export default function CreateTaskForm(props: {
   const priorityOptions = transformOptions(taskPriorityList);
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    if (isPending) return;
+    if (isCreating) return;
     const payload = {
       workspaceId,
       projectId: values.projectId,
@@ -259,7 +262,7 @@ export default function CreateTaskForm(props: {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {isLoading && (
+                          {isProjectsLoading && (
                             <div className="my-2">
                               <Loader className="w-4 h-4 place-self-center flex animate-spin" />
                             </div>
@@ -457,9 +460,9 @@ export default function CreateTaskForm(props: {
             <Button
               className="flex place-self-end  h-[40px] text-white font-semibold"
               type="submit"
-              disabled={isPending}
+              disabled={isCreating}
             >
-              {isPending && <Loader className="animate-spin" />}
+              {isCreating && <Loader className="animate-spin" />}
               Create
             </Button>
           </form>

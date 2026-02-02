@@ -38,6 +38,8 @@ const TaskTable = () => {
   const workspaceId = useWorkspaceId();
   const columns = getColumns(projectId);
 
+  const isValidWorkspaceId = !!workspaceId && workspaceId !== "undefined";
+
   const { data, isLoading } = useQuery({
     queryKey: [
       "all-tasks",
@@ -59,6 +61,7 @@ const TaskTable = () => {
         pageSize,
       }),
     staleTime: 0,
+    enabled: isValidWorkspaceId,
   });
 
   const tasks: TaskType[] = data?.tasks || [];

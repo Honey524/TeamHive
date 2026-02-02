@@ -28,7 +28,7 @@ export default function EditWorkspaceForm() {
   const queryClient = useQueryClient();
   const workspaceId = useWorkspaceId();
 
-  const { mutate, isPending } = useMutation({
+  const { mutate, isLoading } = useMutation({
     mutationFn: editWorkspaceMutationFn,
   });
 
@@ -55,7 +55,7 @@ export default function EditWorkspaceForm() {
   }, [form, workspace]);
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    if (isPending) return;
+    if (isLoading) return;
     const payload = {
       workspaceId: workspaceId,
       data: { ...values },
@@ -143,10 +143,10 @@ export default function EditWorkspaceForm() {
             {canEditWorkspace && (
               <Button
                 className="flex place-self-end  h-[40px] text-white font-semibold"
-                disabled={isPending}
+                disabled={isLoading}
                 type="submit"
               >
-                {isPending && <Loader className="animate-spin" />}
+                {isLoading && <Loader className="animate-spin" />}
                 Update Workspace
               </Button>
             )}

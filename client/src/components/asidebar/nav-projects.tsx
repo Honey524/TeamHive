@@ -52,11 +52,11 @@ export function NavProjects() {
   const [pageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(5);
 
-  const { mutate, isPending: isLoading } = useMutation({
+  const { mutate, isLoading: isDeletingProject } = useMutation({
     mutationFn: deleteProjectMutationFn,
   });
 
-  const { data, isPending, isFetching, isError } =
+  const { data, isLoading, isFetching, isError } =
     useGetProjectsInWorkspaceQuery({
       workspaceId,
       pageSize,
@@ -121,7 +121,7 @@ export function NavProjects() {
         </SidebarGroupLabel>
         <SidebarMenu className="h-[320px] scrollbar overflow-y-auto pb-2">
           {isError ? <div>Error occured</div> : null}
-          {isPending ? (
+          {isLoading ? (
             <Loader
               className=" w-5 h-5
              animate-spin
@@ -129,7 +129,7 @@ export function NavProjects() {
             />
           ) : null}
 
-          {!isPending && projects?.length === 0 ? (
+          {!isLoading && projects?.length === 0 ? (
             <div className="pl-3">
               <p className="text-xs text-muted-foreground">
                 There is no projects in this Workspace yet. Projects you create
@@ -183,7 +183,7 @@ export function NavProjects() {
                       >
                         <DropdownMenuSeparator />
                         <DropdownMenuItem
-                          disabled={isLoading}
+                          disabled={isDeletingProject}
                           onClick={() => onOpenDialog(item)}
                         >
                           <Trash2 className="text-muted-foreground" />
@@ -214,7 +214,7 @@ export function NavProjects() {
 
       <ConfirmDialog
         isOpen={open}
-        isLoading={isLoading}
+        isLoading={isDeletingProject}
         onClose={onCloseDialog}
         onConfirm={handleConfirm}
         title="Delete Project"

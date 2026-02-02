@@ -7,13 +7,13 @@ import { Loader } from "lucide-react";
 
 const RecentMembers = () => {
   const workspaceId = useWorkspaceId();
-  const { data, isPending } = useGetWorkspaceMembers(workspaceId);
+    const { data, isLoading } = useGetWorkspaceMembers(workspaceId);
 
   const members = data?.members || [];
 
   return (
     <div className="flex flex-col pt-2">
-      {isPending ? (
+        {isLoading ? (
         <Loader
           className="w-8 h-8 
         animate-spin

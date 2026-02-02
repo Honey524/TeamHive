@@ -39,7 +39,7 @@ export default function EditTaskForm({ task, onClose }: { task: TaskType; onClos
   const queryClient = useQueryClient();
   const workspaceId = useWorkspaceId();
 
-  const { mutate, isPending } = useMutation({
+  const { mutate, isLoading } = useMutation({
     mutationFn: editTaskMutationFn,
   });
 
@@ -85,7 +85,7 @@ export default function EditTaskForm({ task, onClose }: { task: TaskType; onClos
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    if (isPending) return;
+    if (isLoading) return;
 
     const payload = {
       workspaceId,
@@ -214,8 +214,8 @@ export default function EditTaskForm({ task, onClose }: { task: TaskType; onClos
               </FormItem>
             )} />
 
-            <Button type="submit" className="w-full" disabled={isPending}>
-              {isPending && <Loader className="animate-spin" />}
+            <Button type="submit" className="w-full" disabled={isLoading}>
+              {isLoading && <Loader className="animate-spin" />}
               Save Changes
             </Button>
           </form>

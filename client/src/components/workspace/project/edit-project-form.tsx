@@ -45,7 +45,7 @@ export default function EditProjectForm(props: {
     description: z.string().trim(),
   });
 
-  const { mutate, isPending } = useMutation({
+  const { mutate, isLoading } = useMutation({
     mutationFn: editProjectMutationFn,
   });
 
@@ -70,7 +70,7 @@ export default function EditProjectForm(props: {
   };
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    if (isPending) return;
+    if (isLoading) return;
     const payload = {
       projectId,
       workspaceId,
@@ -181,11 +181,11 @@ export default function EditProjectForm(props: {
             </div>
 
             <Button
-              disabled={isPending}
+              disabled={isLoading}
               className="flex place-self-end  h-[40px] text-white font-semibold"
               type="submit"
             >
-              {isPending && <Loader className="animate-spin" />}
+              {isLoading && <Loader className="animate-spin" />}
               Update
             </Button>
           </form>

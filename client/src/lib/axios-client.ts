@@ -16,6 +16,22 @@ const API = axios.create({
   timeout: 10000,
 });
 
+// REQUEST INTERCEPTOR: block accidental requests that include 'undefined' in path
+API.interceptors.request.use(
+  (config) => {
+    const url = config?.url || "";
+    if (url.includes("undefined")) {
+      const err = new Error("Blocked request: missing workspaceId or parameter in URL");
+      // Attach original config for debugging
+      (err as any).config = config;
+      console.warn("Blocked outgoing API request with 'undefined' in URL:", url);
+      return Promise.reject(err);
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
 // ===============================
 // RESPONSE INTERCEPTOR
 // ===============================

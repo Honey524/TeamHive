@@ -5,12 +5,13 @@ import { getWorkspaceAnalyticsQueryFn } from "@/lib/api";
 
 const WorkspaceAnalytics = () => {
   const workspaceId = useWorkspaceId();
+  const isValidWorkspaceId = !!workspaceId && workspaceId !== "undefined";
 
-  const { data, isPending } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["workspace-analytics", workspaceId],
     queryFn: () => getWorkspaceAnalyticsQueryFn(workspaceId),
     staleTime: 0,
-    enabled: !!workspaceId,
+    enabled: isValidWorkspaceId,
   });
 
   const analytics = data?.analytics;
@@ -18,17 +19,17 @@ const WorkspaceAnalytics = () => {
   return (
     <div className="grid gap-4 md:gap-5 lg:grid-cols-2 xl:grid-cols-3">
       <AnalyticsCard
-        isLoading={isPending}
+        isLoading={isLoading}
         title="Total Task"
         value={analytics?.totalTasks || 0}
       />
       <AnalyticsCard
-        isLoading={isPending}
+        isLoading={isLoading}
         title="Overdue Task"
         value={analytics?.overdueTasks || 0}
       />
       <AnalyticsCard
-        isLoading={isPending}
+        isLoading={isLoading}
         title="Completed Task"
         value={analytics?.completedTasks || 0}
       />

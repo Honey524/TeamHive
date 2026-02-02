@@ -32,11 +32,11 @@ const AllMembers = () => {
   const queryClient = useQueryClient();
   const workspaceId = useWorkspaceId();
 
-  const { data, isPending } = useGetWorkspaceMembers(workspaceId);
+  const { data, isLoading } = useGetWorkspaceMembers(workspaceId);
   const members = data?.members || [];
   const roles = data?.roles || [];
 
-  const { mutate, isPending: isLoading } = useMutation({
+  const { mutate, isLoading: isChangingRole } = useMutation({
     mutationFn: changeWorkspaceMemberRoleMutationFn,
   });
 
@@ -72,7 +72,7 @@ const AllMembers = () => {
 
   return (
     <div className="grid gap-6 pt-2">
-      {isPending ? (
+      {isLoading ? (
         <Loader className="w-8 h-8 animate-spin place-self-center flex" />
       ) : null}
 
@@ -102,12 +102,12 @@ const AllMembers = () => {
             <div className="flex items-center gap-3">
               <Popover>
                 <PopoverTrigger asChild>
-                  <Button
+                    <Button
                     variant="outline"
                     size="sm"
                     className="ml-auto min-w-24 capitalize disabled:opacity-95 disabled:pointer-events-none"
                     disabled={
-                      isLoading ||
+                      isChangingRole ||
                       !canChangeMemberRole ||
                       member.userId._id === user?._id
                     }
@@ -123,11 +123,11 @@ const AllMembers = () => {
                     <Command>
                       <CommandInput
                         placeholder="Select new role..."
-                        disabled={isLoading}
+                        disabled={isChangingRole}
                         className="disabled:pointer-events-none"
                       />
                       <CommandList>
-                        {isLoading ? (
+                        {isChangingRole ? (
                           <Loader className="w-8 h-8 animate-spin place-self-center flex my-4" />
                         ) : (
                           <>
@@ -138,7 +138,7 @@ const AllMembers = () => {
                                   role.name !== "OWNER" && (
                                     <CommandItem
                                       key={role._id}
-                                      disabled={isLoading}
+                                      disabled={isChangingRole}
                                       className="disabled:pointer-events-none gap-1 mb-1  flex flex-col items-start px-4 py-2 cursor-pointer"
                                       onSelect={() => {
                                         handleSelect(

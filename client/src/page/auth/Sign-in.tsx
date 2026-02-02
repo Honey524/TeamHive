@@ -30,7 +30,7 @@ const SignIn = () => {
   const [searchParams] = useSearchParams();
   const returnUrl = searchParams.get("returnUrl");
 
-  const { mutate, isPending } = useMutation({
+  const { mutate, isLoading } = useMutation({
     mutationFn: loginMutationFn,
   });
 
@@ -52,7 +52,7 @@ const SignIn = () => {
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    if (isPending) return;
+    if (isLoading) return;
 
     mutate(values, {
       onSuccess: (data) => {
@@ -147,11 +147,11 @@ const SignIn = () => {
                         />
                       </div>
                       <Button
-                        disabled={isPending}
+                        disabled={isLoading}
                         type="submit"
                         className="w-full"
                       >
-                        {isPending && <Loader className="animate-spin" />}
+                        {isLoading && <Loader className="animate-spin" />}
                         Login
                       </Button>
                     </div>

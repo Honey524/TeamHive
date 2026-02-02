@@ -28,7 +28,7 @@ export default function CreateWorkspaceForm({
 
   const queryClient = useQueryClient();
 
-  const { mutate, isPending } = useMutation({
+  const { mutate, isLoading } = useMutation({
     mutationFn: createWorkspaceMutationFn,
   });
 
@@ -48,7 +48,7 @@ export default function CreateWorkspaceForm({
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    if (isPending) return;
+    if (isLoading) return;
     mutate(values, {
       onSuccess: (data) => {
         queryClient.resetQueries({
@@ -140,11 +140,11 @@ export default function CreateWorkspaceForm({
             </div>
 
             <Button
-              disabled={isPending}
+              disabled={isLoading}
               className="w-full h-[40px] text-white font-semibold"
               type="submit"
             >
-              {isPending && <Loader className="animate-spin" />}
+              {isLoading && <Loader className="animate-spin" />}
               Create Workspace
             </Button>
           </form>

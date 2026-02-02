@@ -8,6 +8,8 @@ const useGetProjectsInWorkspaceQuery = ({
   pageNumber,
   skip = false,
 }: AllProjectPayloadType) => {
+  const isValidWorkspaceId = !!workspaceId && workspaceId !== "undefined";
+
   const query = useQuery({
     queryKey: ["allprojects", workspaceId, pageNumber, pageSize],
     queryFn: () =>
@@ -18,7 +20,7 @@ const useGetProjectsInWorkspaceQuery = ({
       }),
     staleTime: Infinity,
     placeholderData: skip ? undefined : keepPreviousData,
-    enabled: !skip,
+    enabled: isValidWorkspaceId && !skip,
   });
   return query;
 };

@@ -30,7 +30,7 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
   const queryClient = useQueryClient();
   const workspaceId = useWorkspaceId();
 
-  const { mutate, isPending } = useMutation({
+  const { mutate, isLoading } = useMutation({
     mutationFn: deleteTaskMutationFn,
   });
 
@@ -87,7 +87,7 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
       {/* Delete Task Confirmation Dialog */}
       <ConfirmDialog
         isOpen={openDeleteDialog}
-        isLoading={isPending}
+        isLoading={isLoading}
         onClose={() => setOpenDialog(false)}
         onConfirm={handleConfirm}
         title="Delete Task"

@@ -19,7 +19,7 @@ const DeleteWorkspaceCard = () => {
 
   const { open, onOpenDialog, onCloseDialog } = useConfirmDialog();
 
-  const { mutate, isPending } = useMutation({
+  const { mutate, isLoading } = useMutation({
     mutationFn: deleteWorkspaceMutationFn,
   });
 
@@ -80,7 +80,7 @@ const DeleteWorkspaceCard = () => {
 
       <ConfirmDialog
         isOpen={open}
-        isLoading={isPending}
+        isLoading={isLoading}
         onClose={onCloseDialog}
         onConfirm={handleConfirm}
         title={`Delete  ${workspace?.name} Workspace`}

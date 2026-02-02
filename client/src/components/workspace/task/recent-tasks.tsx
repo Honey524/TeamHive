@@ -15,6 +15,7 @@ import { Loader } from "lucide-react";
 
 const RecentTasks = () => {
   const workspaceId = useWorkspaceId();
+  const isValidWorkspaceId = !!workspaceId && workspaceId !== "undefined";
 
   const { data, isLoading } = useQuery({
     queryKey: ["all-tasks", workspaceId],
@@ -23,7 +24,7 @@ const RecentTasks = () => {
         workspaceId,
       }),
     staleTime: 0,
-    enabled: !!workspaceId,
+    enabled: isValidWorkspaceId,
   });
 
   const tasks: TaskType[] = data?.tasks || [];

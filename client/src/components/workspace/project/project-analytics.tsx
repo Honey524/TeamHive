@@ -10,11 +10,11 @@ const ProjectAnalytics = () => {
 
   const workspaceId = useWorkspaceId();
 
-  const { data, isPending } = useQuery({
-    queryKey: ["project-analytics", projectId],
+  const { data, isLoading } = useQuery({
+    queryKey: ["project-analytics", workspaceId, projectId],
     queryFn: () => getProjectAnalyticsQueryFn({ workspaceId, projectId }),
     staleTime: 0,
-    enabled: !!projectId,
+    enabled: !!projectId && !!workspaceId,
   });
 
   const analytics = data?.analytics;
@@ -22,17 +22,17 @@ const ProjectAnalytics = () => {
   return (
     <div className="grid gap-4 md:gap-5 lg:grid-cols-2 xl:grid-cols-3">
       <AnalyticsCard
-        isLoading={isPending}
+        isLoading={isLoading}
         title="Total Task"
         value={analytics?.totalTasks || 0}
       />
       <AnalyticsCard
-        isLoading={isPending}
+        isLoading={isLoading}
         title="Overdue Task"
         value={analytics?.overdueTasks || 0}
       />
       <AnalyticsCard
-        isLoading={isPending}
+        isLoading={isLoading}
         title="Completed Task"
         value={analytics?.completedTasks || 0}
       />

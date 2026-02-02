@@ -28,7 +28,7 @@ import { Loader } from "lucide-react";
 const SignUp = () => {
   const navigate = useNavigate();
 
-  const { mutate, isLoading } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: registerMutationFn,
   });
   const formSchema = z.object({
@@ -53,7 +53,7 @@ const SignUp = () => {
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    if (isLoading) return;
+    if (isPending) return;
     mutate(values, {
       onSuccess: () => {
         navigate("/");
@@ -162,10 +162,10 @@ const SignUp = () => {
                       </div>
                       <Button
                         type="submit"
-                        disabled={isLoading}
+                        disabled={isPending}
                         className="w-full"
                       >
-                        {isLoading && <Loader className="animate-spin" />}
+                        {isPending && <Loader className="animate-spin" />}
                         Sign up
                       </Button>
                     </div>

@@ -25,7 +25,7 @@ const InviteUser = () => {
   const { data: authData, isLoading: authLoading } = useAuth();
   const user = authData?.user;
 
-  const { mutate, isLoading: isJoining } = useMutation({
+  const { mutate, isPending: isJoining } = useMutation({
     mutationFn: invitedUserJoinWorkspaceMutationFn,
   });
 

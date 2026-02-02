@@ -1,5 +1,9 @@
 import { CustomError } from "@/types/custom-error.type";
-import axios from "axios";
+import axios, { InternalAxiosRequestConfig } from "axios";
+
+interface RequestError extends Error {
+  config?: InternalAxiosRequestConfig;
+}
 
 console.log("API BASE URL =", import.meta.env.VITE_API_BASE_URL);
 
@@ -21,9 +25,9 @@ API.interceptors.request.use(
   (config) => {
     const url = config?.url || "";
     if (url.includes("undefined")) {
-      const err = new Error("Blocked request: missing workspaceId or parameter in URL");
+      const err: RequestError = new Error("Blocked request: missing workspaceId or parameter in URL");
       // Attach original config for debugging
-      (err as any).config = config;
+      err.config = config;
       console.warn("Blocked outgoing API request with 'undefined' in URL:", url);
       return Promise.reject(err);
     }

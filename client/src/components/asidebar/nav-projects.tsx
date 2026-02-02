@@ -52,7 +52,7 @@ export function NavProjects() {
   const [pageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(5);
 
-  const { mutate, isLoading: isDeletingProject } = useMutation({
+  const { mutate, isPending: isDeletingProject } = useMutation({
     mutationFn: deleteProjectMutationFn,
   });
 

@@ -36,7 +36,7 @@ const AllMembers = () => {
   const members = data?.members || [];
   const roles = data?.roles || [];
 
-  const { mutate, isLoading: isChangingRole } = useMutation({
+  const { mutate, isPending: isChangingRole } = useMutation({
     mutationFn: changeWorkspaceMemberRoleMutationFn,
   });
 
